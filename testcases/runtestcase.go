@@ -13,7 +13,7 @@ import (
 	cxpb "google.golang.org/genproto/googleapis/cloud/dialogflow/cx/v3beta1"
 )
 
-func RunTestCase(ctx context.Context, projectID, location, agentID, testCaseID string) {
+func RunTestCase(ctx context.Context, projectID, location, agentID, testCaseID string) error {
 	agent := fmt.Sprintf("projects/%s/locations/%s/agents/%s", projectID, location, agentID)
 
 	var apiEndpoint string
@@ -29,8 +29,7 @@ func RunTestCase(ctx context.Context, projectID, location, agentID, testCaseID s
 	tcc, err := cx.NewTestCasesClient(ctx, option.WithEndpoint(apiEndpoint))
 	if err != nil {
 		log.Fatalf("Unable to obtain Dialogflow CX client: %v", err)
-		//return err
-		os.Exit(1)
+		return err
 	}
 	defer tcc.Close()
 
@@ -39,7 +38,7 @@ func RunTestCase(ctx context.Context, projectID, location, agentID, testCaseID s
 	tc, err := GetTestCaseDetails(ctx, location, testCaseName)
 	if err != nil {
 		log.Printf("can't get test case details for %s: %s", testCaseName, err)
-		os.Exit(1)
+		return err
 	}
 	log.Printf("running test case '%s' (%s)", tc.DisplayName, testCaseName)
 
@@ -50,13 +49,13 @@ func RunTestCase(ctx context.Context, projectID, location, agentID, testCaseID s
 	op, err := tcc.RunTestCase(ctx, runTestCaseRequest)
 	if err != nil {
 		log.Printf("error creating test case run request: %v", err)
-		os.Exit(1)
+		return err
 	}
 
 	result, err := op.Wait(ctx)
 	if err != nil {
 		log.Printf("error waiting test case run request: %v", err)
-		os.Exit(1)
+		return err
 	}
 	testCaseResults = append(testCaseResults, result.Result)
 

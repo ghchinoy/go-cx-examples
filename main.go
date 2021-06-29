@@ -16,5 +16,8 @@ func main() {
 	agentID := os.Getenv("AGENT_ID")
 	testCaseID := os.Getenv("TEST_CASE_ID")
 
-	testcases.RunTestCase(ctx, projectID, location, agentID, testCaseID)
+	err := testcases.RunTestCase(ctx, projectID, location, agentID, testCaseID)
+	if err != nil {
+		os.Exit(1)
+	}
 }
