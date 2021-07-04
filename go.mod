@@ -1,4 +1,4 @@
-module github.com/ghchinoy/cx-go-examples
+module github.com/ghchinoy/cx-examples
 
 go 1.16
 

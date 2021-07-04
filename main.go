@@ -4,7 +4,7 @@ import (
 	"context"
 	"os"
 
-	"github.com/ghchinoy/cx-go-examples/testcases"
+	"github.com/ghchinoy/cx-examples/testcases"
 )
 
 func main() {
